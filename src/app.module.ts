@@ -1,16 +1,17 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-// ~
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { UsersModule } from './users/users.module';
+
 import { User } from './users/entities/user.entity';
-// import { PayrollsModule } from './payrolls/payrolls.module';
-// import { Payroll } from './payrolls/entities/payrolls.entity';
-import { DataSource } from 'typeorm';
+import { UsersModule } from './users/users.module';
+
+import { Customer } from './customers/entities/customers.entity';
+import { CustomersModule } from './customers/customers.module';
 
 @Module({
   imports: [
+    // ~ set database
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: 'localhost',
@@ -18,16 +19,13 @@ import { DataSource } from 'typeorm';
       username: 'root',
       password: '',
       database: 'nestjs',
-      entities: [User],
-      // entities: [User, Payroll],
       synchronize: true,
+      entities: [User, Customer],
     }),
     UsersModule,
-    // PayrollsModule,
+    CustomersModule,
   ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {
-  constructor(private dataSource: DataSource) {}
-}
+export class AppModule {}
