@@ -42,3 +42,11 @@ export class BaseTableSearch extends BasicData {
   @IsString()
   query?: string;
 }
+
+export interface IBaseTable<DT> {
+  data: DT;
+  currentPage?: number;
+  perPage?: number;
+  totalPage?: number;
+  total?: number;
+}

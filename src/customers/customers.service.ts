@@ -2,12 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Customer } from 'src/utils/entity';
-import {
-  CCustomer,
-  CCustomers,
-  CCustomerSearch,
-  CustomerDto,
-} from './dto/customers.dto';
+import { CustomerSearch, CustomerDto } from './dto/customers.dto';
+import { IBaseTable } from 'src/utils/helper';
 
 const path = 'customers';
 
@@ -18,7 +14,7 @@ export class CustomersService {
     private customersRepository: Repository<Customer>,
   ) {}
 
-  async findAll(search: CCustomerSearch) {
+  async findAll(search: CustomerSearch) {
     const { size, query, sortBy, orderBy, projectName } = search;
 
     const builder = this.customersRepository.createQueryBuilder(path);
@@ -45,7 +41,7 @@ export class CustomersService {
       builder.orderBy(sortBy ?? 'id', orderBy);
     }
 
-    const result = new CCustomers();
+    const result = {} as IBaseTable<Customer[]>;
 
     const page: number = parseInt(search.page as any) || 1;
     const perPage: number = +size;
@@ -62,7 +58,7 @@ export class CustomersService {
     return result;
   }
 
-  findOne(id: number): Promise<CCustomer> {
+  findOne(id: number) {
     return this.customersRepository.findOneBy({ id });
   }
 
